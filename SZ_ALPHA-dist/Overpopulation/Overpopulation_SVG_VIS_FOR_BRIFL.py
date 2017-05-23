@@ -6,7 +6,7 @@
 import svgwrite
 from Overpopulation import State, POP_COUNT, GROWTH_RATE
 
-DEBUG = False
+DEBUG = True
 
 W = 500
 H = 400
@@ -15,7 +15,7 @@ def render_state(s):
     dwg = swgwrite.Drawing(filename = "test-svgwrite.svg",
                            id = "state_svg",
                            size = (str(W) + "px", str(H) + "px"),
-                           debug = False)
+                           debug = True)
 
     dwg.add(dwg.rect(insert = (0,0),
                      size = (str(W) + "px", str(H) + "px"),
@@ -28,6 +28,8 @@ def render_state(s):
                      text_anchor = "middle",
                      font_size="25",
                      fill = "red"))
+
+    return (dwg.tostring())
 
 if __name__ == '__main__':
     DEBUG = True

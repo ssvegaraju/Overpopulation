@@ -35,6 +35,7 @@ Overpopulation.
 GROWTH_RATE = 1.185
 POP_COUNT = 500
 #<COMMON_CODE>
+
 class State:
     def __init__(self, growth_rate, pop_count):
         self.growth_rate = growth_rate
@@ -126,7 +127,7 @@ OPERATORS = [Operator("Require SexEd in Schools. Growth Rate - 0.0015.",
                       lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
              Operator("Commit to stabilizing population growth through the\
                        exercise of human rights and development. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),]
+                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015))]
 
 #</OPERATORS>
 

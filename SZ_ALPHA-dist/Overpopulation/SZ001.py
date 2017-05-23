@@ -72,7 +72,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, \
 
 DEBUG = False
 
-HOST = '127.0.0.1'
+HOST = 'nicto.cs.washington.edu'
 PORT = 5000 # Default port, overridden by optional command-line arg.
 
 import os
