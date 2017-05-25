@@ -65,6 +65,7 @@ def apply_op(state, growth_factor):
     s = state.__copy__()
     s.growth_rate -= growth_factor
     s.pop_count *= s.growth_rate
+    s.pop_count = round(s.pop_count)
     return s
 
 def goal_test(s):
@@ -93,7 +94,7 @@ print(INITIAL_STATE)
 #</INITIAL_STATE>
 
 #<ROLES>
-ROLES = [{'name':'Player', 'min':1, 'max':1}]
+ROLES = [{'name':'Gov. Official', 'min':1, 'max':1}]
 #</ROLES>
 
 #<OPERATORS>
@@ -105,15 +106,15 @@ OPERATORS = [Operator("Require SexEd in Schools. Growth Rate - 0.0015.",
                       economy. Growth Rate - 0.0015.",
                       lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("One-Child Policy. Growth Rate - 0.02.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.02)),
              Operator("Universal access to safe contraceptives. Growth Rate - 0.01.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.01)),
              Operator("Guarantee secondary education, especially for girls\
                        . Growth Rate - 0.0005.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0005)),
              Operator("Eradicate gender bias from law, economic\
                        opportunity, health, and culture. Growth Rate - 0.0025.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0025)),
              Operator("End policies that offer financial incentives\
                        based on number of children. Growth Rate - 0.0015.",
                       lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
@@ -121,7 +122,7 @@ OPERATORS = [Operator("Require SexEd in Schools. Growth Rate - 0.0015.",
                        and development. Growth Rate - 0.0015.",
                       lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Put prices on environmental costs/impacts. Growth Rate - 0.005.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.005)),
              Operator("Promote transition from childbearing population\
                        to an aging population. Growth Rate - 0.0015.",
                       lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
