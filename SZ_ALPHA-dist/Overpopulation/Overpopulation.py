@@ -58,8 +58,8 @@ class State:
     def __hash__(self):
         return (self.__str__()).__hash__()
 
-def can_apply(state):
-    return goal_test(state)
+def can_apply(state, role_number):
+    return not goal_test(state)
 
 def apply_op(state, growth_factor):
     s = state.__copy__()
@@ -79,11 +79,11 @@ class Operator:
         self.precond = precond
         self.state_transf = state_transf
 
-    def is_applicable(self, s):
-        return self.precond(s)
+    def is_applicable(self, s, role_number):
+        return self.precond(s, role_number)
 
-    def apply(self, s, growth_factor):
-        return self.state_transf(s, growth_factor)
+    def apply(self, s):
+        return self.state_transf(s)
 
 #</COMMON_CODE>
 
@@ -98,36 +98,36 @@ ROLES = [{'name':'Player', 'min':1, 'max':1}]
 
 #<OPERATORS>
 OPERATORS = [Operator("Require SexEd in Schools. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Support Planned Parenthood. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Increase investment in technology sector of domestic\
                       economy. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("One-Child Policy. Growth Rate - 0.02.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Universal access to safe contraceptives. Growth Rate - 0.01.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Guarantee secondary education, especially for girls\
                        . Growth Rate - 0.0005.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Eradicate gender bias from law, economic\
                        opportunity, health, and culture. Growth Rate - 0.0025.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("End policies that offer financial incentives\
                        based on number of children. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Stress education on population, environment, \
                        and development. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Put prices on environmental costs/impacts. Growth Rate - 0.005.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Promote transition from childbearing population\
                        to an aging population. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015)),
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
              Operator("Commit to stabilizing population growth through the\
                        exercise of human rights and development. Growth Rate - 0.0015.",
-                      lambda s: can_apply(s), lambda s: apply_op(s, 0.0015))]
+                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015))]
 
 #</OPERATORS>
 
@@ -143,6 +143,6 @@ GOAL_MESSAGE_FUNCTION = lambda s: goal_message(s)
 BRIFL_SVG = True
 render_state = None
 def use_BRIFL_SVG():
-    global render_State
+    global render_state
     from Overpopulation_SVG_VIS_FOR_BRIFL import render_state
 #</STATE_VIS>          
