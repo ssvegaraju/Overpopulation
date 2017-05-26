@@ -33,26 +33,31 @@ Overpopulation.
 #<COMMON_DATA>
 #</COMMON_DATA>
 GROWTH_RATE = 1.185
-POP_COUNT = 500
+POP_COUNT = 1000
+WEALTH = 100
 #<COMMON_CODE>
 
 class State:
-    def __init__(self, growth_rate, pop_count):
+    def __init__(self, growth_rate, pop_count, wealth):
         self.growth_rate = growth_rate
         self.pop_count = pop_count
+        self.wealth = wealth
 
     def __copy__(self):
-        news = State(None, None)
+        news = State(None, None, None)
         news.growth_rate = self.growth_rate
         news.pop_count = self.pop_count
+        news.wealth = self.wealth
         return news
 
     def __str__(self):
-        return "Current Population: " + str(self.pop_count) + ", Current growth rate: " + str(self.growth_rate)
+        return "Current Population: " + str(self.pop_count) + ", Current growth rate: " + str(self.growth_rate) + \
+        ", Current wealth: " + str(self.wealth)
 
     def __eq__(self, s):
         if self.growth_rate != s.growth_rate: return False
         if self.pop_count != s.pop_count: return False
+        if self.wealth != s.wealth: return False
         return True
 
     def __hash__(self):
@@ -61,35 +66,38 @@ class State:
 def can_apply(state, role_number):
     return not goal_test(state)
 
-def apply_op(state, growth_factor):
+def apply_op(state, growth_factor, cost):
     s = state.__copy__()
     s.growth_rate -= growth_factor
     s.pop_count *= s.growth_rate
     s.pop_count = round(s.pop_count)
+    s.wealth -= cost
     return s
 
 def goal_test(s):
-    return s.growth_rate == 1 and s.pop_count > 10000
+    return s.growth_rate <= 1 or s.pop_count > 10000 or s.wealth < 0
 
 def goal_message(s):
     return "The Simulation has Concluded"
 
 class Operator:
-    def __init__(self, name, precond, state_transf):
-        self.name = name
+    def __init__(self, name, precond, state_transf, growth_rate, cost):
         self.precond = precond
         self.state_transf = state_transf
+        self.growth_rate = growth_rate
+        self.cost = cost
+        self.name = name + " Growth Rate: " + str(self.growth_rate) + ", Cost: $" + str(self.cost)
 
     def is_applicable(self, s, role_number):
         return self.precond(s, role_number)
 
     def apply(self, s):
-        return self.state_transf(s)
+        return self.state_transf(s, self.growth_rate, self.cost)
 
 #</COMMON_CODE>
 
 #<INITIAL_STATE>
-INITIAL_STATE = State(GROWTH_RATE, POP_COUNT)
+INITIAL_STATE = State(GROWTH_RATE, POP_COUNT, WEALTH)
 print(INITIAL_STATE)
 #</INITIAL_STATE>
 
@@ -98,37 +106,31 @@ ROLES = [{'name':'Gov. Official', 'min':1, 'max':1}]
 #</ROLES>
 
 #<OPERATORS>
-OPERATORS = [Operator("Require SexEd in Schools. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
-             Operator("Support Planned Parenthood. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
-             Operator("Increase investment in technology sector of domestic\
-                      economy. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
-             Operator("One-Child Policy. Growth Rate - 0.02.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.02)),
-             Operator("Universal access to safe contraceptives. Growth Rate - 0.01.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.01)),
-             Operator("Guarantee secondary education, especially for girls\
-                       . Growth Rate - 0.0005.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0005)),
-             Operator("Eradicate gender bias from law, economic\
-                       opportunity, health, and culture. Growth Rate - 0.0025.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0025)),
-             Operator("End policies that offer financial incentives\
-                       based on number of children. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
-             Operator("Stress education on population, environment, \
-                       and development. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
-             Operator("Put prices on environmental costs/impacts. Growth Rate - 0.005.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.005)),
-             Operator("Promote transition from childbearing population\
-                       to an aging population. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015)),
+OPERATORS = [Operator("Require SexEd in Schools.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5),
+             Operator("Support Planned Parenthood.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5),
+             Operator("Increase investment in technology sector of domestic economy.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5),
+             Operator("One-Child Policy.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.02, 5),
+             Operator("Universal access to safe contraceptives.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.01, 5),
+             Operator("Guarantee secondary education, especially for girls.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0005, 5),
+             Operator("Eradicate gender bias from law, economic opportunity, health, and culture.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0025, 5),
+             Operator("End policies that offer financial incentives based on number of children.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5),
+             Operator("Stress education on population, environment, and development.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5),
+             Operator("Put prices on environmental costs/impacts.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.005, 5),
+             Operator("Promote transition from childbearing population to an aging population.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5),
              Operator("Commit to stabilizing population growth through the\
-                       exercise of human rights and development. Growth Rate - 0.0015.",
-                      lambda s, v: can_apply(s,v), lambda s: apply_op(s, 0.0015))]
+                       exercise of human rights and development.",
+                      lambda s, v: can_apply(s,v), lambda s, g, c: apply_op(s, g, c), 0.0015, 5)]
 
 #</OPERATORS>
 

@@ -33,6 +33,6 @@ def render_state(s):
 
 if __name__ == '__main__':
     DEBUG = True
-    INITIAL_STATE = (1.185, 500)
+    INITIAL_STATE = (GROWTH_RATE, POP_COUNT)
     print(INITIAL_STATE)
     render_state(INITIAL_STATE)
