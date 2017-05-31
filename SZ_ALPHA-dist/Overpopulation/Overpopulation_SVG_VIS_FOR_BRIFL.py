@@ -4,7 +4,7 @@
 # Python version 3.6.1
 
 import svgwrite
-from Overpopulation import POP_COUNT, GROWTH_RATE, WEALTH, goal_test
+from Overpopulation import POP_COUNT, GROWTH_RATE, WEALTH, YEAR, goal_test
 
 DEBUG = False
 
@@ -65,6 +65,13 @@ def render_state(s):
                          text_anchor = "start",
                          font_size="12",
                          fill="white"))
+
+        # Year Indicator
+        dwg.add(dwg.text("Year: " + str(s.year),
+                         insert = (W - 2, H - 2),
+                         text_anchor = "end",
+                         font_size = "17",
+                         fill = "white"))
 
     else:
         dwg.add(dwg.text("The Simulation has Concluded, thanks for playing!",

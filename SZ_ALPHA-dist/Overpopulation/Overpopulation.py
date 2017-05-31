@@ -35,29 +35,33 @@ Overpopulation.
 GROWTH_RATE = 1.185
 POP_COUNT = 1000
 WEALTH = 100
+YEAR = 2000
 #<COMMON_CODE>
 
 class State:
-    def __init__(self, growth_rate, pop_count, wealth):
+    def __init__(self, growth_rate, pop_count, wealth, year):
         self.growth_rate = growth_rate
         self.pop_count = pop_count
         self.wealth = wealth
+        self.year = year
 
     def __copy__(self):
-        news = State(None, None, None)
+        news = State(None, None, None, None)
         news.growth_rate = self.growth_rate
         news.pop_count = self.pop_count
         news.wealth = self.wealth
+        news.year = self.year
         return news
 
     def __str__(self):
         return "Current Population: " + str(self.pop_count) + ", Current growth rate: " + str(self.growth_rate) + \
-        ", Current wealth: " + str(self.wealth)
+        ", Current wealth: " + str(self.wealth) + ", Year: " + str(self.year)
 
     def __eq__(self, s):
         if self.growth_rate != s.growth_rate: return False
         if self.pop_count != s.pop_count: return False
         if self.wealth != s.wealth: return False
+        if self.year != s.year: return False
         return True
 
     def __hash__(self):
@@ -72,6 +76,7 @@ def apply_op(state, growth_factor, cost):
     s.pop_count *= s.growth_rate
     s.pop_count = round(s.pop_count)
     s.wealth -= cost
+    s.year += 1
     return s
 
 def goal_test(s):
@@ -97,7 +102,7 @@ class Operator:
 #</COMMON_CODE>
 
 #<INITIAL_STATE>
-INITIAL_STATE = State(GROWTH_RATE, POP_COUNT, WEALTH)
+INITIAL_STATE = State(GROWTH_RATE, POP_COUNT, WEALTH, YEAR)
 print(INITIAL_STATE)
 #</INITIAL_STATE>
 
