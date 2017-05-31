@@ -21,7 +21,10 @@ def render_state(s):
                      size = (str(W) + "px", str(H) + "px"),
                      stroke_width = "1",
                      stroke = "black",
-                     fill = "rgb(100, 100, 100)")) #grey
+                     fill = "rgb(" + \
+                     str(round(1185 - (s.growth_rate * 1000))) + ", " + \
+                     str(round(s.pop_count / 40)) + ", " + \
+                     str(round(255 - (s.wealth * 2.5))) + ")"))
 
     if not goal_test(s):
         # Wealth bar
