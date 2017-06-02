@@ -69,6 +69,10 @@ def render_state(s):
                              stroke = "black",
                              fill = "rgb(50, 50, 255)"))
 
+            dwg.add(dwg.image("https://www.iconfinder.com/data/icons/business-investing/500/Business_Investment_2-256.png",
+                              insert = (1, 10 + H / 10),
+                              size = (H/10, H/10)))
+
             dwg.add(dwg.text("Wealth = " + str(s.wealth),
                              insert = (1, 10 + (H / 20)),
                              text_anchor = "start",
@@ -82,6 +86,10 @@ def render_state(s):
                              stroke = "black",
                              fill = "rgb(50, 50, 255)"))
 
+            dwg.add(dwg.image("https://www.iconfinder.com/data/icons/large-svg-icons-part-3/512/community_group_people_users-512.png",
+                              insert = (1, 130 + H/10),
+                              size = (H/10, H/10)))
+
             dwg.add(dwg.text("Population count = " + str(s.pop_count),
                              insert = (1, 130 + (H / 20)),
                              text_anchor = "start",
@@ -94,6 +102,10 @@ def render_state(s):
                              stroke_width = "1",
                              stroke = "black",
                              fill = "rgb(50, 50, 255)"))
+            
+            dwg.add(dwg.image("http://passive-components.eu/wp-content/uploads/2016/01/analytics-icon.png",
+                              insert = (1, 260 + H / 10),
+                              size = (H/10, H/10)))
 
             dwg.add(dwg.text("Growth rate = " + str(s.growth_rate),
                              insert = (1, 260 + (H / 20)),
