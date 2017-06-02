@@ -74,7 +74,7 @@ def render_state(s):
                               size = (H/10, H/10)))
 
             dwg.add(dwg.text("Wealth = " + str(s.wealth),
-                             insert = (1, 10 + (H / 20)),
+                             insert = (H / 10 + 1, 10 + (H / 7.5)),
                              text_anchor = "start",
                              font_size="12",
                              fill="white"))
@@ -91,7 +91,7 @@ def render_state(s):
                               size = (H/10, H/10)))
 
             dwg.add(dwg.text("Population count = " + str(s.pop_count),
-                             insert = (1, 130 + (H / 20)),
+                             insert = (H / 10 + 1, 130 + (H / 7.5)),
                              text_anchor = "start",
                              font_size="12",
                              fill="white"))
@@ -108,7 +108,7 @@ def render_state(s):
                               size = (H/10, H/10)))
 
             dwg.add(dwg.text("Growth rate = " + str(s.growth_rate),
-                             insert = (1, 260 + (H / 20)),
+                             insert = (H / 10 + 1, 260 + (H / 7.5)),
                              text_anchor = "start",
                              font_size="12",
                              fill="white"))
