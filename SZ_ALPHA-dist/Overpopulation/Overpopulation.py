@@ -30,7 +30,7 @@ Overpopulation.
 GROWTH_RATE = 1.185      
 POP_COUNT = 1000     
 WEALTH = 100    
-YEAR = 2000    
+YEAR = 1998    
 USED = 0                                                                                            #index of operator
 USED_INDEX = [False, False, False, False, False, False, False, False, False, False, False, False]   #Checks whether an operator has been used or not
 #<COMMON_CODE>
@@ -67,8 +67,16 @@ class State:
     def __hash__(self):
         return (self.__str__()).__hash__()
 
-def can_apply(state, role_number, used):
+def can_apply_vis(state, role_number, used):
+    return state.year < 2000
+
+def apply_vis(state, growth_factor, cost, used):
     s = state.__copy__()
+    s.year += 1
+    return s
+
+def can_apply(state, role_number, used):
+    if state.year < 2000: return False
     if (used != None):
         return not USED_INDEX[used] #if the index for the operator is not null, check array to see if it has been used before
     return not goal_test(state)
@@ -96,7 +104,7 @@ class Operator:
         self.state_transf = state_transf
         self.growth_rate = growth_rate
         self.cost = cost
-        self.name = name + " Growth Rate: " + str(self.growth_rate) + ", Cost: $" + str(self.cost)
+        self.name = name + " Growth Rate: " + str(self.growth_rate) + ", Cost: $" + str(self.cost) if name!="Next->" else name
         self.used = used
 
     def is_applicable(self, s, role_number):
@@ -141,7 +149,8 @@ OPERATORS = [Operator("Require SexEd in Schools.",
                       lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
              Operator("Commit to stabilizing population growth through the\
                        exercise of human rights and development.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None)]
+                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
+             Operator("Next->", lambda s, v: can_apply_vis(s,v,None), lambda s, g, c, u: apply_vis(s, g, c, u), 0, 0, None)]
 
 #</OPERATORS>
 

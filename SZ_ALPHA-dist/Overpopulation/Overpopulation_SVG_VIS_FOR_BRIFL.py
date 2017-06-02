@@ -26,11 +26,38 @@ def render_state(s):
                      str(round(s.pop_count / 40)) + ", " + \
                      str(round(255 - (s.wealth * 2.5))) + ")"))
 
-    if s.year == 2000:
+    if s.year == 1998:
         dwg.add(dwg.text("Welcome to the Overpopulation Simulator!",
                          insert = (W/2, H/2),
                          text_anchor="middle",
                          font_size="20",
+                         fill="white"))
+        
+    elif s.year == 1999:
+        dwg.add(dwg.text("The goal of this simulation is to decrease",
+                         insert = (W/2, 100),
+                         text_anchor="middle",
+                         font_size="17",
+                         fill="white"))
+        dwg.add(dwg.text("the growth rate of the population to just under 1",
+                         insert = (W/2, 118),
+                         text_anchor="middle",
+                         font_size="17",
+                         fill="white"))
+        dwg.add(dwg.text("before the population exceeds 10000.",
+                         insert = (W/2, 136),
+                         text_anchor="middle",
+                         font_size="17",
+                         fill="white"))
+        dwg.add(dwg.text("Keep an eye on your wealth and watch the background!",
+                         insert = (W/2, 154),
+                         text_anchor="middle",
+                         font_size="17",
+                         fill="white"))
+        dwg.add(dwg.text("(The more pink the background, the closer you are to success!)",
+                         insert = (W/2, 172),
+                         text_anchor="middle",
+                         font_size="17",
                          fill="white"))
         
     else:
