@@ -17,14 +17,15 @@ def render_state(s):
                            size = (str(W) + "px", str(H) + "px"),
                            debug = True)
 
+    green_value = round((GROWTH_RATE * 1000 - s.growth_rate * 1000))
+    rb_values = str(round(255 - green_value if 255 - green_value > 0 else 0))
+    color = "rgb(" + rb_values + ", " + str(green_value) + ", " + rb_values + ")"
+
     dwg.add(dwg.rect(insert = (0,0),
                      size = (str(W) + "px", str(H) + "px"),
                      stroke_width = "1",
                      stroke = "black",
-                     fill = "rgb(" + \
-                     str(round(1185 - (s.growth_rate * 1000))) + ", " + \
-                     str(round(s.pop_count / 40)) + ", " + \
-                     str(round(255 - (s.wealth * 2.5))) + ")"))
+                     fill = color))
 
     if s.year == 1998:
         dwg.add(dwg.text("Welcome to the Overpopulation Simulator!",
@@ -81,7 +82,7 @@ def render_state(s):
 
             # Population bar
             dwg.add(dwg.rect(insert = (0, 130),
-                             size = (str(s.pop_count / 50) + "px", str(H / 10) + "px"),
+                             size = (str(s.pop_count / 20) + "px", str(H / 10) + "px"),
                              stroke_width = "1",
                              stroke = "black",
                              fill = "rgb(50, 50, 255)"))
