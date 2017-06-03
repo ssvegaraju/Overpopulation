@@ -33,6 +33,8 @@ WEALTH = 100
 YEAR = 1998    
 USED = 0                                                                                            #index of operator
 USED_INDEX = [False, False, False, False, False, False, False, False, False, False, False, False]   #Checks whether an operator has been used or not
+USED_INDEX_GROW = [False, False, False, False, False, False, False, False, False, False, False, False]
+INFLECTION_POINT = 5000
 #<COMMON_CODE>
 
 class State:
@@ -75,8 +77,27 @@ def apply_vis(state, growth_factor, cost, used):
     s.year += 1
     return s
 
+def can_apply_grow(state, role_number, used):
+    if state.year < 2000: return False
+    if state.pop_count > INFLECTION_POINT: return False
+    if (used != None):
+        if USED_INDEX_GROW[used] == True: return False #if the index for the operator is not null, check array to see if it has been used before
+    return not goal_test(state)
+
+def apply_grow(state, growth_factor, cost, used):
+    s = state.__copy__()
+    s.growth_rate += growth_factor
+    s.pop_count *= s.growth_rate
+    s.pop_count = round(s.pop_count)
+    s.wealth += cost
+    s.year += 1
+    if (used != None):
+        USED_INDEX_GROW[used] = True     #similar check as above, just setting it to true if it hasnt been used before
+    return s
+
 def can_apply(state, role_number, used):
     if state.year < 2000: return False
+    if state.pop_count < INFLECTION_POINT: return False
     if (used != None):
         if USED_INDEX[used] == True: return False #if the index for the operator is not null, check array to see if it has been used before
     return not goal_test(state)
@@ -150,7 +171,9 @@ OPERATORS = [Operator("Require SexEd in Schools.",
              Operator("Commit to stabilizing population growth through the\
                        exercise of human rights and development.",
                       lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
-             Operator("Next->", lambda s, v: can_apply_vis(s,v,None), lambda s, g, c, u: apply_vis(s, g, c, u), 0, 0, None)]
+             Operator("Next->", lambda s, v: can_apply_vis(s,v,None), lambda s, g, c, u: apply_vis(s, g, c, u), 0, 0, None),
+             Operator("Testing inflection point",
+                      lambda s, v: can_apply_grow(s, v, None), lambda s, g, c, u: apply_grow(s, g, c, u), 0.1, 5, None)]
 
 #</OPERATORS>
 

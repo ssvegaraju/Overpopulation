@@ -11,6 +11,12 @@ DEBUG = False
 W = 500
 H = 400
 
+def getGreen(green):
+    if green < 0:
+        return 0
+    else:
+        return 255
+
 def render_state(s):
     dwg = svgwrite.Drawing(filename = "test-svgwrite.svg",
                            id = "state_svg",
@@ -18,7 +24,8 @@ def render_state(s):
                            debug = True)
 
     green_value = round((GROWTH_RATE * 1000 - s.growth_rate * 1000))
-    rb_values = str(round(255 - green_value if 255 - green_value > 0 else 0))
+    green_value = green_value if (green_value >= 0 and green_value <= 255) else getGreen(green_value)
+    rb_values = str(round(255 - green_value if 255 - green_value >= 0 else 0))
     color = "rgb(" + rb_values + ", " + str(green_value) + ", " + rb_values + ")"
 
     dwg.add(dwg.rect(insert = (0,0),
