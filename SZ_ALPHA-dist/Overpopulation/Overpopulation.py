@@ -79,7 +79,8 @@ def apply_vis(state, growth_factor, cost, used):
 
 def can_apply(state, role_number, used, inf):
     if state.year < 2000: return False
-    if state.pop_count < INFLECTION_POINT and inf: return False
+    if (state.pop_count < INFLECTION_POINT and inf): return False
+    if (state.pop_count > INFLECTION_POINT and not inf): return False
     if (used != None):
         if USED_INDEX[used] == True: return False #if the index for the operator is not null, check array to see if it has been used before
     return not goal_test(state)
