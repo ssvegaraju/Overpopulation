@@ -4,7 +4,7 @@
 # Python version 3.6.1
 
 import svgwrite
-from Overpopulation import POP_COUNT, GROWTH_RATE, WEALTH, YEAR, goal_test
+from Overpopulation import POP_COUNT, GROWTH_RATE, WEALTH, YEAR, goal_test, goal_message
 
 DEBUG = False
 
@@ -129,11 +129,18 @@ def render_state(s):
                              fill = "white"))
 
         else:
-            dwg.add(dwg.text("The Simulation has Concluded, thanks for playing!",
-                    insert = (W / 2, H / 2),
-                    text_anchor = "middle",
-                    font_size = "20",
-                    fill="white"))
+            # Game over text
+            dwg.add(dwg.text("Game over.",
+                            insert = (W / 2, 150),
+                            text_anchor = "middle",
+                            font_size = "20",
+                            fill="white"))
+
+            dwg.add(dwg.text(goal_message(s),
+                            insert = (W / 2, 168),
+                            text_anchor = "middle",
+                            font_size = "20",
+                            fill="white"))
 
     return (dwg.tostring())
 

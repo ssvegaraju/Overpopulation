@@ -99,7 +99,8 @@ def goal_test(s):
     return s.growth_rate <= 1 or s.pop_count > 10000 or s.wealth < 0
 
 def goal_message(s):
-    return "The Simulation has Concluded"
+    if s.pop_count <=10000 and s.growth_rate <= 1 and s.wealth > 0: return "Congratulations on maintaining a sustainable population!"
+    return "You failed to maintain a sustainable population."
 
 def get_name(name, growth_rate, cost):
     if str(name) != "Next->":
