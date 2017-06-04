@@ -23,7 +23,7 @@ def render_state(s):
                            size = (str(W) + "px", str(H) + "px"),
                            debug = True)
 
-    green_value = round((GROWTH_RATE * 1000 - s.growth_rate * 1000))
+    green_value = round((s.pop_count / 20) * s.growth_rate)
     green_value = green_value if (green_value >= 0 and green_value <= 255) else getGreen(green_value)
     rb_values = str(round(255 - green_value if 255 - green_value >= 0 else 0))
     color = "rgb(" + rb_values + ", " + str(green_value) + ", " + rb_values + ")"
