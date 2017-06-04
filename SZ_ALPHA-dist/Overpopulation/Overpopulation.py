@@ -27,14 +27,14 @@ Overpopulation.
 
 #<COMMON_DATA>
 #</COMMON_DATA>
-GROWTH_RATE = 1.185      
-POP_COUNT = 1000     
+GROWTH_RATE = 1.04     
+POP_COUNT = 500     
 WEALTH = 100    
 YEAR = 1998    
 USED = 0                                                                                            #index of operator
 USED_INDEX = [False, False, False, False, False, False, False, False, False, False, False, False]   #Checks whether an operator has been used or not
 USED_INDEX_GROW = [False, False, False, False, False, False, False, False, False, False, False, False]
-INFLECTION_POINT = 5000
+INFLECTION_POINT = 4000
 #<COMMON_CODE>
 
 class State:
@@ -78,7 +78,7 @@ def apply_vis(state, growth_factor, cost, used):
     return s
 
 def can_apply(state, role_number, used, inf):
-    if state.year < 2000: return False
+    if state.year < 2000 or state.wealth < 0: return False
     if (state.pop_count < INFLECTION_POINT and inf): return False
     if (state.pop_count > INFLECTION_POINT and not inf): return False
     if (used != None):
@@ -146,9 +146,9 @@ OPERATORS = [Operator("Require SexEd in Schools.",
              Operator("Increase investment in technology sector of domestic economy.",
                       lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, -5, None, True),
              Operator("One-Child Policy.",
-                      lambda s, v: can_apply(s,v,3,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.1, 0, 3, True),
+                      lambda s, v: can_apply(s,v,3,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.15, 0, 3, True),
              Operator("Universal access to safe contraceptives.",
-                      lambda s, v: can_apply(s,v,4,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.2, -5, 4, True),
+                      lambda s, v: can_apply(s,v,4,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.1, -5, 4, True),
              Operator("Guarantee secondary education, especially for girls.",
                       lambda s, v: can_apply(s,v,5,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.001, -5, 5, True),
              Operator("Eradicate gender bias from law, economic opportunity, health, and culture.",
@@ -168,9 +168,9 @@ OPERATORS = [Operator("Require SexEd in Schools.",
                       lambda s, v: can_apply(s, v, None, True), lambda s, g, c, u: apply_op(s, g, c, u), 0, 0, None, True),
              Operator("Next->", lambda s, v: can_apply_vis(s,v,None), lambda s, g, c, u: apply_vis(s, g, c, u), 0, 0, None, True),
              Operator("Invest into machinery and manufacturing.",
-                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.15, -5, None, False),
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.05, -5, None, False),
              Operator("Invest into health sector.",
-                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.3, -5, None, False),
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.1, -5, None, False),
              Operator("Promote Family Farms.",
                       lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None, False),
              Operator("Support negative stance on contraceptives.",
