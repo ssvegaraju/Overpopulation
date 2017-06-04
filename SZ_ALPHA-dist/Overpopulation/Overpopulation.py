@@ -77,37 +77,19 @@ def apply_vis(state, growth_factor, cost, used):
     s.year += 1
     return s
 
-def can_apply_grow(state, role_number, used):
+def can_apply(state, role_number, used, inf):
     if state.year < 2000: return False
-    if state.pop_count > INFLECTION_POINT: return False
-    if (used != None):
-        if USED_INDEX_GROW[used] == True: return False #if the index for the operator is not null, check array to see if it has been used before
-    return not goal_test(state)
-
-def apply_grow(state, growth_factor, cost, used):
-    s = state.__copy__()
-    s.growth_rate += growth_factor
-    s.pop_count *= s.growth_rate
-    s.pop_count = round(s.pop_count)
-    s.wealth += cost
-    s.year += 1
-    if (used != None):
-        USED_INDEX_GROW[used] = True     #similar check as above, just setting it to true if it hasnt been used before
-    return s
-
-def can_apply(state, role_number, used):
-    if state.year < 2000: return False
-    if state.pop_count < INFLECTION_POINT: return False
+    if state.pop_count < INFLECTION_POINT and inf: return False
     if (used != None):
         if USED_INDEX[used] == True: return False #if the index for the operator is not null, check array to see if it has been used before
     return not goal_test(state)
 
 def apply_op(state, growth_factor, cost, used):
     s = state.__copy__()
-    s.growth_rate -= growth_factor
+    s.growth_rate += growth_factor
     s.pop_count *= s.growth_rate
     s.pop_count = round(s.pop_count)
-    s.wealth -= cost
+    s.wealth += cost
     s.year += 1
     if (used != None):
         USED_INDEX[used] = True     #similar check as above, just setting it to true if it hasnt been used before
@@ -119,14 +101,23 @@ def goal_test(s):
 def goal_message(s):
     return "The Simulation has Concluded"
 
+def get_name(name, growth_rate, cost):
+    if str(name) != "Next->":
+        gr = ("Growth rate increases by " + str(abs(growth_rate))) if growth_rate > 0 else ("Growth rate decreases by " + str(abs(growth_rate)))
+        cs = ("Profit: $" + str(abs(cost))) if cost > 0 else ("Cost: $" + str(abs(cost)))
+        return str(str(name) + " " + str(gr) + " " + str(cs))
+    else:
+        return str(name)
+
 class Operator:
-    def __init__(self, name, precond, state_transf, growth_rate, cost, used):
+    def __init__(self, name, precond, state_transf, growth_rate, cost, used, inf):
         self.precond = precond
         self.state_transf = state_transf
         self.growth_rate = growth_rate
         self.cost = cost
-        self.name = name + " Growth Rate: " + str(self.growth_rate) + ", Cost: $" + str(self.cost) if name!="Next->" else name
+        self.name = get_name(name, growth_rate, cost)
         self.used = used
+        self.inf = inf
 
     def is_applicable(self, s, role_number):
         return self.precond(s, role_number)
@@ -147,33 +138,51 @@ ROLES = [{'name':'Gov. Official', 'min':1, 'max':1}]
 
 #<OPERATORS>
 OPERATORS = [Operator("Require SexEd in Schools.",
-                      lambda s, v: can_apply(s,v,0), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, 0),
+                      lambda s, v: can_apply(s,v,0,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, 0, True),
              Operator("Support Planned Parenthood.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
+                      lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, None, True),
              Operator("Increase investment in technology sector of domestic economy.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
+                      lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, None, True),
              Operator("One-Child Policy.",
-                      lambda s, v: can_apply(s,v,3), lambda s, g, c, u: apply_op(s, g, c, u), 0.02, 5, 3),
+                      lambda s, v: can_apply(s,v,3,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.02, 0, 3, True),
              Operator("Universal access to safe contraceptives.",
-                      lambda s, v: can_apply(s,v,4), lambda s, g, c, u: apply_op(s, g, c, u), 0.01, 5, 4),
+                      lambda s, v: can_apply(s,v,4,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.01, -5, 4, True),
              Operator("Guarantee secondary education, especially for girls.",
-                      lambda s, v: can_apply(s,v,5), lambda s, g, c, u: apply_op(s, g, c, u), 0.0005, 5, 5),
+                      lambda s, v: can_apply(s,v,5,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0005, -5, 5, True),
              Operator("Eradicate gender bias from law, economic opportunity, health, and culture.",
-                      lambda s, v: can_apply(s,v,6), lambda s, g, c, u: apply_op(s, g, c, u), 0.0025, 5, 6),
+                      lambda s, v: can_apply(s,v,6,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0025, -5, 6, True),
              Operator("End policies that offer financial incentives based on number of children.",
-                      lambda s, v: can_apply(s,v,7), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, 7),
+                      lambda s, v: can_apply(s,v,7,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, 5, 7, True),
              Operator("Stress education on population, environment, and development.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
+                      lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, None, True),
              Operator("Put prices on environmental costs/impacts.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.005, 5, None),
+                      lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.005, -5, None, True),
              Operator("Promote transition from childbearing population to an aging population.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
+                      lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, None, True),
              Operator("Commit to stabilizing population growth through the\
                        exercise of human rights and development.",
-                      lambda s, v: can_apply(s,v,None), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None),
-             Operator("Next->", lambda s, v: can_apply_vis(s,v,None), lambda s, g, c, u: apply_vis(s, g, c, u), 0, 0, None),
-             Operator("Testing inflection point",
-                      lambda s, v: can_apply_grow(s, v, None), lambda s, g, c, u: apply_grow(s, g, c, u), 0.1, 5, None)]
+                      lambda s, v: can_apply(s,v,None,True), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, None, True),
+             Operator("Do Nothing.",
+                      lambda s, v: can_apply(s, v, None, True), lambda s, g, c, u: apply_op(s, g, c, u), 0, 0, None, True),
+             Operator("Next->", lambda s, v: can_apply_vis(s,v,None), lambda s, g, c, u: apply_vis(s, g, c, u), 0, 0, None, True),
+             Operator("Invest into machinery and manufacturing.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, -5, None, False),
+             Operator("Invest into health sector.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, -5, None, False),
+             Operator("Promote Family Farms.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 5, None, False),
+             Operator("Support negative stance on contraceptives.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 0, None, False),
+             Operator("Promote policies that offer financial incentives based on number of children.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, -5, None, False),
+             Operator("Support women not working.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 0, None, False),
+             Operator("Work with religious organization to spread beliefs on family values.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0.0015, 0, None, False),
+             Operator("Support universal education.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), -0.0015, -5, None, False),
+             Operator("Do Nothing.",
+                      lambda s, v: can_apply(s, v, None, False), lambda s, g, c, u: apply_op(s, g, c, u), 0, 0, None, False)]
 
 #</OPERATORS>
 
