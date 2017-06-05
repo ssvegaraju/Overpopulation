@@ -43,28 +43,38 @@ def render_state(s):
                          fill="white"))
         
     elif s.year == 1999:
-        dwg.add(dwg.text("The goal of this simulation is to decrease",
+        dwg.add(dwg.text("The goal of this simulation is to first promote growth in the",
                          insert = (W/2, 100),
                          text_anchor="middle",
                          font_size="17",
                          fill="white"))
-        dwg.add(dwg.text("the growth rate of the population to just under 1",
+        dwg.add(dwg.text("population, and then stabilize the growth (growth rate ~= 1).",
                          insert = (W/2, 118),
                          text_anchor="middle",
                          font_size="17",
                          fill="white"))
-        dwg.add(dwg.text("before the population exceeds 10000.",
+        dwg.add(dwg.text("New choices will become available based on how far you've come.",
                          insert = (W/2, 136),
                          text_anchor="middle",
                          font_size="17",
                          fill="white"))
-        dwg.add(dwg.text("Keep an eye on your wealth and watch the background!",
+        dwg.add(dwg.text("You must achieve a stable population before the year 2050,",
                          insert = (W/2, 154),
                          text_anchor="middle",
                          font_size="17",
                          fill="white"))
-        dwg.add(dwg.text("(The greener the background, the closer you are to success!)",
+        dwg.add(dwg.text("or before the population is uncontrollable (>10000).",
                          insert = (W/2, 172),
+                         text_anchor="middle",
+                         font_size="17",
+                         fill="white"))
+        dwg.add(dwg.text("Keep an eye on your wealth and watch the background color!",
+                         insert = (W/2, 190),
+                         text_anchor="middle",
+                         font_size="17",
+                         fill="white"))
+        dwg.add(dwg.text("(The greener the background, the closer you are to success!)",
+                         insert = (W/2, 208),
                          text_anchor="middle",
                          font_size="17",
                          fill="white"))
