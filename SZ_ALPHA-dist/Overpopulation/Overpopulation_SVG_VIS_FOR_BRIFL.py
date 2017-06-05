@@ -10,6 +10,7 @@ DEBUG = False
 
 W = 500
 H = 400
+BAR_HEIGHT = str(H / 10) + "px"
 
 def getGreen(green):
     if green < 0:
@@ -62,7 +63,7 @@ def render_state(s):
                          text_anchor="middle",
                          font_size="17",
                          fill="white"))
-        dwg.add(dwg.text("(The more pink the background, the closer you are to success!)",
+        dwg.add(dwg.text("(The greener the background, the closer you are to success!)",
                          insert = (W/2, 172),
                          text_anchor="middle",
                          font_size="17",
@@ -71,11 +72,12 @@ def render_state(s):
     else:
         if not goal_test(s):
             # Wealth bar
-            dwg.add(dwg.rect(insert = (0, 10),
-                             size = (str(s.wealth * 5) + "px", str(H / 10) + "px"),
+            wealth_bar = dwg.rect(insert = (0, 10),
+                             size = (str(s.wealth * 5) + "px", BAR_HEIGHT),
                              stroke_width = "1",
                              stroke = "black",
-                             fill = "rgb(50, 50, 255)"))
+                             fill = "rgb(50, 50, 255)")
+            dwg.add(wealth_bar)
 
             dwg.add(dwg.image("https://www.iconfinder.com/data/icons/business-investing/500/Business_Investment_2-256.png",
                               insert = (1, 10 + H / 10),
@@ -139,7 +141,7 @@ def render_state(s):
             dwg.add(dwg.text(goal_message(s),
                             insert = (W / 2, 168),
                             text_anchor = "middle",
-                            font_size = "20",
+                            font_size = "18",
                             fill="white"))
 
     return (dwg.tostring())
