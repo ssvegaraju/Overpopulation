@@ -108,13 +108,39 @@ def render_state(s):
 
             # Growth rate bar
             dwg.add(dwg.rect(insert = (0, 260),
-                             size = (str(s.growth_rate * 25) + "px", str(H / 10) + "px"),
+                             size = (str(W) + "px", "1px"),
                              stroke_width = "1",
                              stroke = "black",
                              fill = "rgb(50, 50, 255)"))
+                #min
+            dwg.add(dwg.rect(insert = (1, 255),
+                             size = ("1px", "10px"),
+                             stroke_width="1",
+                             stroke = "black",
+                             fill = "rgb(50,50,255)"))
+            dwg.add(dwg.text("0.750", insert = (2, 280), text_anchor="start", font_size="12", fill="white"))
+                #1
+            dwg.add(dwg.rect(insert = (W/ 8, 255),
+                             size = ("1px", "10px"),
+                             stroke_width="1",
+                             stroke = "black",
+                             fill = "rgb(50,50,255)"))
+            dwg.add(dwg.text("1.000", insert = (W / 8 + 1, 280), text_anchor="start", font_size="12", fill="white"))
+                #max
+            dwg.add(dwg.rect(insert = (W - 1, 255),
+                             size = ("1px", "10px"),
+                             stroke_width="1",
+                             stroke = "black",
+                             fill = "rgb(50,50,255)"))
+            dwg.add(dwg.text("2.750", insert = (W - 1, 280), text_anchor="end", font_size="12", fill="white"))
+                #CURRENT RATE
+            dwg.add(dwg.polygon([(s.growth_rate*W/8 - 5, 235), (s.growth_rate*W/8 + 5,235), (s.growth_rate*W/8, 260)]))
+            dwg.add(dwg.text(str(s.growth_rate), insert = (s.growth_rate * W / 8 , 234),
+                             text_anchor="middle", font_size="8", fill="white"))
+            
             
             dwg.add(dwg.image("http://passive-components.eu/wp-content/uploads/2016/01/analytics-icon.png",
-                              insert = (1, 260 + H / 10),
+                              insert = (1, 265 + H / 10),
                               size = (H/10, H/10)))
 
             dwg.add(dwg.text("Growth rate = " + str(s.growth_rate),
@@ -129,6 +155,9 @@ def render_state(s):
                              text_anchor = "end",
                              font_size = "17",
                              fill = "white"))
+
+            # Color Legend
+            
 
         else:
             # Game over text
