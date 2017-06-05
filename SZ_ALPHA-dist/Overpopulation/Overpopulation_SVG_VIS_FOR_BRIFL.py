@@ -24,6 +24,7 @@ def render_state(s):
                            size = (str(W) + "px", str(H) + "px"),
                            debug = True)
 
+    # Changes background color depending on how close the user is to the goal state. 
     green_value = round((s.pop_count / 20) * s.growth_rate)
     green_value = green_value if (green_value >= 0 and green_value <= 255) else getGreen(green_value)
     rb_values = str(round(255 - green_value if 255 - green_value >= 0 else 0))

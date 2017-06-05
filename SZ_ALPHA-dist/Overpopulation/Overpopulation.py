@@ -77,6 +77,7 @@ def apply_vis(state, growth_factor, cost, used):
     s.year += 1
     return s
 
+# 
 def can_apply(state, role_number, used, inf, cost):
     if state.year < 2000 or state.wealth < 0: return False
     if (state.pop_count < INFLECTION_POINT and inf): return False
@@ -98,13 +99,16 @@ def apply_op(state, growth_factor, cost, used):
         USED_INDEX[used] = True     #similar check as above, just setting it to true if it hasnt been used before
     return s
 
+# Tests if the state is at goal test. Must have a sustainable growth rate, population and a positive wealth. 
 def goal_test(s):
     return s.growth_rate <= 1 or s.pop_count > 10000 or s.wealth < 0
 
+# Shows a message depending on whether the user wins or not
 def goal_message(s):
     if s.pop_count <=10000 and s.growth_rate <= 1 and s.wealth > 0: return "Congratulations on maintaining a sustainable population!"
     return "You failed to maintain a sustainable population."
 
+# Describes the operator in the visualization
 def get_name(name, growth_rate, cost):
     if str(name) != "Next->":
         gr = ("Growth rate increases by " + str(abs(growth_rate))) if growth_rate > 0 else ("Growth rate decreases by " + str(abs(growth_rate)))
